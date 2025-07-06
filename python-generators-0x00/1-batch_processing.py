@@ -12,7 +12,7 @@ def stream_users_in_batches(batch_size):
             yield batch
             batch = []
 
-    if batch:  # yield remaining rows if any
+    if batch:
         yield batch
 
     cursor.close()
@@ -20,6 +20,8 @@ def stream_users_in_batches(batch_size):
 
 
 def batch_processing(batch_size):
+    for batch in stream_users_in_batches(batch_size):
+
     for batch in stream_users_in_batches(batch_size):
         for user in batch:
             if user['age'] > 25:
