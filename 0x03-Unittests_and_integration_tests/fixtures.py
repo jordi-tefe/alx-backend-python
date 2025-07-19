@@ -947,9 +947,6 @@ TEST_PAYLOAD = [
     ['episodes.dart', 'cpp-netlib', 'dagger', 'ios-webkit-debug-proxy', 'google.github.io', 'kratu', 'build-debian-cloud', 'traceur-compiler', 'firmata.py'],
     ['dagger', 'kratu', 'traceur-compiler', 'firmata.py'],
   )
-]
-"""Fixtures for integration tests"""
-
 org_payload = {
     "login": "test_org",
     "id": 1,
@@ -976,5 +973,6 @@ TEST_PAYLOAD = [
         "expected_repos": expected_repos,
         "apache2_repos": apache2_repos
     }
+]
 ]
 
