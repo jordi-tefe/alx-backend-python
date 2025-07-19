@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Unit tests for utils.py module.
-This file contains tests for access_nested_map, get_json, and memoize functions.
+This file contains tests for access_nested_map, get_json,
+and memoize functions.
 """
 
 import unittest
