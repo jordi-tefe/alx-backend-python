@@ -948,18 +948,33 @@ TEST_PAYLOAD = [
     ['dagger', 'kratu', 'traceur-compiler', 'firmata.py'],
   )
 ]
+"""Fixtures for integration tests"""
+
 org_payload = {
     "login": "test_org",
+    "id": 1,
     "repos_url": "https://api.github.com/orgs/test_org/repos"
 }
 
 repos_payload = [
-    {"name": "repo1", "license": {"key": "apache-2.0"}},
-    {"name": "repo2", "license": {"key": "mit"}},
-    {"name": "repo3", "license": {"key": "apache-2.0"}},
+    {"id": 1, "name": "repo1"},
+    {"id": 2, "name": "repo2"},
+    {"id": 3, "name": "repo3"}
 ]
 
 expected_repos = ["repo1", "repo2", "repo3"]
 
-apache2_repos = ["repo1", "repo3"]
+apache2_repos = [
+    {"id": 1, "name": "repo1", "license": {"key": "apache-2.0"}},
+    {"id": 2, "name": "repo2", "license": {"key": "apache-2.0"}}
+]
+
+TEST_PAYLOAD = [
+    {
+        "org_payload": org_payload,
+        "repos_payload": repos_payload,
+        "expected_repos": expected_repos,
+        "apache2_repos": apache2_repos
+    }
+]
 
