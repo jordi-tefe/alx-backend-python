@@ -6,8 +6,6 @@ from unittest.mock import patch, PropertyMock
 from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 import fixtures
-from fixtures
-
 
 class TestGithubOrgClient(unittest.TestCase):
     """Tests for GithubOrgClient"""
