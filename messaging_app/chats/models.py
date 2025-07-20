@@ -9,6 +9,9 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
 
+    # ✅ Explicitly include the password field
+    password = models.CharField(max_length=128)  # This matches Django's built-in password field
+
     ROLE_CHOICES = (
         ('guest', 'Guest'),
         ('host', 'Host'),
