@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch, PropertyMock
 from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
-import fixtures
+from fixtures import apache2_repos,expected_repos,repos_payload,org_payload,TEST_PAYLOAD
 
 class TestGithubOrgClient(unittest.TestCase):
     """Tests for GithubOrgClient"""
@@ -76,7 +76,6 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test that has_license returns expected boolean"""
         result = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(result, expected)
-
 
 @parameterized_class([
     {
