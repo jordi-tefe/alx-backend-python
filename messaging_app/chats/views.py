@@ -1,31 +1,26 @@
-from django.shortcuts import render
-
-# Will implement API views in later tasks
-from rest_framework import generics, permissions
+from rest_framework import viewsets, permissions, status, filters
+from rest_framework.response import Response
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
 
-# ✅ List conversations for the authenticated user
-class UserConversationsView(generics.ListAPIView):
+class ConversationViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Conversation.objects.filter(participants=self.request.user)
 
-# ✅ List messages in a specific conversation
-class ConversationMessagesView(generics.ListAPIView):
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        conversation_id = self.kwargs['conversation_id']
-        return Message.objects.filter(conversation__conversation_id=conversation_id)
-
-# ✅ Send a message (Create new message)
-class SendMessageView(generics.CreateAPIView):
-    serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        conversation_id = self.kwargs.get('conversation_pk')
+        if conversation_id:
+            return Message.objects.filter(conversation_id=conversation_id)
+        return Message.objects.none()
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
