@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.urls import path, include  # ✅ include is required
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('chats.urls')),  # ✅ required for API routing
+    path('api/', include('chats.urls')),
+    path('api-auth/', include('rest_framework.urls')),  # ✅ DRF login/logout
 ]
