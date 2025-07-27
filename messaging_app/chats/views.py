@@ -11,7 +11,7 @@ from .filters import MessageFilter
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated, IsParticipantOfConversation]
-    pagination_class = MessagePagination
+   pagination_class = MessagePagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = MessageFilter
 
