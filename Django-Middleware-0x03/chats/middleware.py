@@ -3,7 +3,9 @@
 import logging
 from django.http import JsonResponse
 from time import time
-
+import gzip
+from io import BytesIO
+from django.utils.deprecation import MiddlewareMixin
 
 # ---------------------- Request Logging Middleware ----------------------
 logger = logging.getLogger(__name__)
@@ -101,3 +103,29 @@ class ThrottlingMiddleware:
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
+
+class GzipMiddleware(MiddlewareMixin):
+    def process_response(self, request, response):
+        # Check if the client accepts gzip
+        if 'gzip' not in request.META.get('HTTP_ACCEPT_ENCODING', ''):
+            return response
+
+        # Skip compression for already compressed responses
+        if response.has_header('Content-Encoding'):
+            return response
+
+        # Only compress for HTTP 200 OK and content with a body
+        if response.status_code != 200 or not response.content:
+            return response
+
+        # Compress the response
+        gzip_buffer = BytesIO()
+        with gzip.GzipFile(mode='wb', fileobj=gzip_buffer) as gzip_file:
+            gzip_file.write(response.content)
+
+        # Set new response content
+        response.content = gzip_buffer.getvalue()
+        response['Content-Encoding'] = 'gzip'
+        response['Content-Length'] = str(len(response.content))
+
+        return response
