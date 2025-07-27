@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'chats.middleware.RolepermissionMiddleware',
     'chats.middleware.GzipMiddleware',
     'chats.middleware.RequestLoggingMiddleware',
       'chats.middleware.RestrictAccessByTimeMiddleware',
