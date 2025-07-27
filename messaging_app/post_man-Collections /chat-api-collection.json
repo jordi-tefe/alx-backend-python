@@ -1,0 +1,22 @@
+{
+  "info": {
+    "name": "Chat API Collection",
+    "_postman_id": "...",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Conversations",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/conversations/",
+          "protocol": "http",
+          ...
+        }
+      }
+    },
+    ...
+  ]
+}
