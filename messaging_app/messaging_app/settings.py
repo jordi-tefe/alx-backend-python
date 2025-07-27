@@ -18,6 +18,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [ 
+     'chats.middleware.RequestLoggingMiddleware',
      'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
