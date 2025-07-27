@@ -129,3 +129,11 @@ class GzipMiddleware(MiddlewareMixin):
         response['Content-Length'] = str(len(response.content))
 
         return response
+
+class RolepermissionMiddleware(MiddlewareMixin):
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        if request.path.startswith('/messages/'):
+            role = request.META.get('HTTP_ROLE')
+            if role != 'admin':
+                return JsonResponse({'error': 'Access denied: Admins only'}, status=403)
+        return None
