@@ -33,8 +33,10 @@ MIDDLEWARE = [
     'chats.middleware.RolepermissionMiddleware',
     'chats.middleware.GzipMiddleware',
     'chats.middleware.RequestLoggingMiddleware',
-      'chats.middleware.RestrictAccessByTimeMiddleware',
+    'chats.middleware.RestrictAccessByTimeMiddleware',
     'chats.middleware.ThrottlingMiddleware',
+    'chats.middleware.OffensiveLanguageMiddleware',
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -42,14 +44,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # ✅ Custom middlewares
-    'chats.middleware.RequestLoggingMiddleware',
-    'chats.middleware.RestrictAccessByTimeMiddleware',
-    'chats.middleware.OffensiveLanguageMiddleware',
-    'chats.middleware.RolePermissionMiddleware',
 ]
-
 ROOT_URLCONF = 'messaging_app.urls'
 
 TEMPLATES = [
