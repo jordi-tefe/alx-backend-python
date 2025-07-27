@@ -13,6 +13,23 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
+class RestrictAccessByTimeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        current_time = datetime.now().time()
+        start = datetime.strptime("09:00", "%H:%M").time()
+        end = datetime.strptime("17:00", "%H:%M").time()
+
+        if not (start <= current_time <= end):
+            return JsonResponse(
+                {"error": "Access restricted to working hours (9AM–5PM)."},
+                status=403
+            )
+
+        return self.get_response(request)
+
 class RequestLoggingMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
