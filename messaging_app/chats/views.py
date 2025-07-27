@@ -5,6 +5,30 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
 from .permissions import IsParticipantOfConversation
+from .pagination import MessagePagination
+from .filters import MessageFilter
+
+class MessageViewSet(viewsets.ModelViewSet):
+    serializer_class = MessageSerializer
+    permission_classes = [permissions.IsAuthenticated, IsParticipantOfConversation]
+    pagination_class = MessagePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = MessageFilter
+
+    def get_queryset(self):
+        conversation_id = self.kwargs.get('conversation_pk')
+        if conversation_id:
+            conversation = Conversation.objects.filter(id=conversation_id, participants=self.request.user).first()
+            if conversation:
+                return Message.objects.filter(conversation=conversation).order_by('-timestamp')
+        return Message.objects.none()
+
+    def perform_create(self, serializer):
+        conversation = serializer.validated_data.get('conversation')
+        if conversation and self.request.user not in conversation.participants.all():
+            raise PermissionDenied(detail="You are not a participant in this conversation.")
+        serializer.save(sender=self.request.user)
+
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
