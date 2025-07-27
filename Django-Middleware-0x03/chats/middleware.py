@@ -4,6 +4,7 @@ import logging
 from django.http import JsonResponse
 from time import time
 
+
 # ---------------------- Request Logging Middleware ----------------------
 logger = logging.getLogger(__name__)
 handler = logging.FileHandler('requests.log')
