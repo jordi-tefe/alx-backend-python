@@ -17,25 +17,26 @@ class ConversationViewSet(viewsets.ModelViewSet):
         return Conversation.objects.filter(participants=self.request.user)
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)  # <-- Enforce permission, raise 403 if denied
-        serializer = self.get_serializer(instance)
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)  # Enforce permission, raise 403 if denied
+        serializer = self.get_serializer(obj)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)  # <-- Enforce permission, raise 403 if denied
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
         return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)  # <-- Enforce permission, raise 403 if denied
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
         return super().partial_update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)  # <-- Enforce permission, raise 403 if denied
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
         return super().destroy(request, *args, **kwargs)
+
 
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
@@ -56,22 +57,22 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer.save(sender=self.request.user)
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)  # <-- Enforce permission, raise 403 if denied
-        serializer = self.get_serializer(instance)
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
+        serializer = self.get_serializer(obj)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
         return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
         return super().partial_update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.check_object_permissions(request, instance)
+        obj = self.get_object()
+        self.check_object_permissions(request, obj)
         return super().destroy(request, *args, **kwargs)
