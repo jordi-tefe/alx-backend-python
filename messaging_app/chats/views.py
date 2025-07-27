@@ -16,11 +16,16 @@ class ConversationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Conversation.objects.filter(participants=self.request.user)
 
-    def retrieve(self, request, *args, **kwargs):
-        obj = self.get_object()
-        self.check_object_permissions(request, obj)  # Enforce permission, raise 403 if denied
-        serializer = self.get_serializer(obj)
-        return Response(serializer.data)
+def retrieve(self, request, *args, **kwargs):
+    obj = self.get_object()
+    try:
+        self.check_object_permissions(request, obj)
+    except PermissionDenied:
+        return Response({"detail": "You do not have permission to perform this action."},
+                        status=status.HTTP_403_FORBIDDEN)
+    serializer = self.get_serializer(obj)
+    return Response(serializer.data)
+
 
     def update(self, request, *args, **kwargs):
         obj = self.get_object()
