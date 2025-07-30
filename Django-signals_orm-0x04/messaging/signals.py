@@ -6,3 +6,7 @@ from .models import Message, Notification
 def create_notification(sender, instance, created, **kwargs):
     if created:
         Notification.objects.create(user=instance.receiver, message=instance)
+@receiver(post_save, sender=Message)
+def log_message_update(sender, instance, created, **kwargs):
+    if not created:
+        print(f"[LOG] Message ID {instance.id} was updated. New content: {instance.content}")
