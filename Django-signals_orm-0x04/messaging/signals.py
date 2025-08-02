@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save ,pre_save
+from django.db.models.signals import post_save ,pre_save,post_delete
 from django.dispatch import receiver
 from .models import Message, Notification ,MessageHistory
 
@@ -47,3 +47,10 @@ def track_message_edits(sender, instance, **kwargs):
             old_content=old_message.content,
             edited_by=instance.edited_by  # Assumes edited_by is set in the view
         )
+
+@receiver(post_delete, sender=User)
+def delete_user_related_data(sender, instance, **kwargs):
+    Message.objects.filter(sender=instance).delete()
+    Message.objects.filter(receiver=instance).delete()
+    Notification.objects.filter(user=instance).delete()
+    MessageHistory.objects.filter(edited_by=instance).delete()
