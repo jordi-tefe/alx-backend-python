@@ -5,6 +5,7 @@ from rest_framework import status , generics, permissions
 from .models import MessageHistory,Message
 from .serializers import MessageHistorySerializer,MessageSerializer
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -30,3 +31,15 @@ class MessageThreadView(ListAPIView):
         return Message.objects.filter(
             sender=self.request.user
         ).select_related('sender', 'receiver', 'parent_message').prefetch_related('replies')
+
+class UserMessagesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Get messages sent by the authenticated user
+        messages = Message.objects.filter(sender=request.user)\
+            .select_related('receiver', 'sender', 'parent_message')\
+            .prefetch_related('history')  # optimize history loading if needed
+
+        serializer = MessageSerializer(messages, many=True)
+        return Response(serializer.data)
