@@ -68,3 +68,13 @@ class MessageWithRepliesView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     lookup_field = 'pk'  # or 'id'
+
+class UnreadInboxView(generics.ListAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Message.unread.unread_for_user(self.request.user).only(
+            'id', 'sender', 'content', 'timestamp'
+        )
+
