@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status , generics, permissions
 from .models import MessageHistory,Message
 from .serializers import MessageHistorySerializer,MessageSerializer
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView ,RetrieveAPIView
 from rest_framework.views import APIView
 
 @api_view(['DELETE'])
@@ -43,3 +43,10 @@ class UserMessagesView(APIView):
 
         serializer = MessageSerializer(messages, many=True)
         return Response(serializer.data)
+
+class MessageWithRepliesView(RetrieveAPIView):
+    queryset = Message.objects.all().select_related('sender', 'receiver', 'edited_by', 'parent_message').prefetch_related('replies')
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    lookup_field = 'pk'  # or 'id'
