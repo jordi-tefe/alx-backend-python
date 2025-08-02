@@ -50,3 +50,14 @@ class MessageWithRepliesView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     lookup_field = 'pk'  # or 'id'
+
+class MessageSerializer(serializers.ModelSerializer):
+    replies = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'receiver', 'content', 'timestamp', 'edited', 'edited_at', 'edited_by', 'parent_message', 'replies']
+
+    def get_replies(self, obj):
+        replies = obj.replies.all().select_related('sender', 'receiver', 'edited_by')
+        return MessageSerializer(replies, many=True).data
