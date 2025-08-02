@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .managers import UnreadMessagesManager
+from django.core.validators import FileExtensionValidator
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -29,3 +30,12 @@ class MessageHistory(models.Model):  # ✅ New model
     old_content = models.TextField()
     edited_at = models.DateTimeField(auto_now_add=True)
     edited_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+class Message(models.Model):
+    # ... existing fields ...
+    attachment = models.FileField(
+        upload_to='attachments/',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'jpg', 'png', 'jpeg'])]
+    )
