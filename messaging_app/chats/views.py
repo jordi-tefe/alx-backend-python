@@ -7,6 +7,7 @@ from .serializers import ConversationSerializer, MessageSerializer
 from .permissions import IsParticipantOfConversation
 from .pagination import MessagePagination
 from .filters import MessageFilter
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
@@ -105,3 +106,13 @@ class MessageViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         self.check_object_permissions(request, obj)
         return super().destroy(request, *args, **kwargs)
+
+
+class MessageCreateView(generics.CreateAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # Important!
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
+
