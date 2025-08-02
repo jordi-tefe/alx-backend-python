@@ -12,6 +12,10 @@ class Message(models.Model):
 
     # ✅ Self-referential foreign key for replies
     parent_message = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+     read = models.BooleanField(default=False)  # new field to track read status
+
+    objects = models.Manager()  # Default manager
+    unread = UnreadMessagesManager()  # Custom manager — we’ll create it next
 
 
 class Notification(models.Model):
