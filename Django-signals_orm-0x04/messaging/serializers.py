@@ -4,7 +4,9 @@ from .models import Message, MessageHistory
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['id', 'sender', 'receiver', 'content', 'timestamp', 'read', 'attachment', 'parent_message']
+        read_only_fields = ['sender', 'timestamp', 'read']
+
 
 class MessageHistorySerializer(serializers.ModelSerializer):
     class Meta:
