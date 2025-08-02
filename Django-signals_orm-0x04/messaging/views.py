@@ -61,3 +61,10 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_replies(self, obj):
         replies = obj.replies.all().select_related('sender', 'receiver', 'edited_by')
         return MessageSerializer(replies, many=True).data
+
+class MessageWithRepliesView(RetrieveAPIView):
+    queryset = Message.objects.all().select_related('sender', 'receiver', 'edited_by', 'parent_message').prefetch_related('replies')
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    lookup_field = 'pk'  # or 'id'
