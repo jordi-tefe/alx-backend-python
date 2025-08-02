@@ -6,6 +6,9 @@ from .models import MessageHistory,Message
 from .serializers import MessageHistorySerializer,MessageSerializer
 from rest_framework.generics import ListAPIView ,RetrieveAPIView
 from rest_framework.views import APIView
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
