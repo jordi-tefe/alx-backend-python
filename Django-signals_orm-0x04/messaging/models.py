@@ -18,6 +18,12 @@ class Message(models.Model):
 
     objects = models.Manager()  # Default manager
     unread = UnreadMessagesManager()  # Custom manager — we’ll create it next
+ attachment = models.FileField(
+        upload_to='attachments/',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'jpg', 'png', 'jpeg'])]
+    )
 
 
 class Notification(models.Model):
