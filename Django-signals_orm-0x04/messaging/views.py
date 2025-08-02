@@ -88,3 +88,13 @@ class MessageCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
+
+@method_decorator(cache_page(60), name='dispatch')
+class ConversationMessagesView(generics.ListAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        conversation_id = self.kwargs['conversation_id']
+        return Message.objects.filter(conversation_id=conversation_id).select_related('sender', 'receiver').prefetch_related('replies')
+
