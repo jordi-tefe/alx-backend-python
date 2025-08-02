@@ -8,7 +8,7 @@ from rest_framework.generics import ListAPIView ,RetrieveAPIView
 from rest_framework.views import APIView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-
+from rest_framework.parsers import MultiPartParser, FormParser
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -80,3 +80,11 @@ class UnreadInboxView(generics.ListAPIView):
         return Message.unread.unread_for_user(self.request.user).only(
             'id', 'sender', 'content', 'timestamp'
         )
+
+class MessageCreateView(generics.CreateAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # Important!
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
